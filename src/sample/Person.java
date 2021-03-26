@@ -49,6 +49,19 @@ public class Person {
     private String dateOfBirth;
     private String description;
 
+    public Person(String csvString) {
+        String[] strings = csvString.split(";");
+        if (strings.length == 7) {
+            secondName = strings[0];
+            firstName = strings[1];
+            fathersName = strings[2];
+            mobileNumbers = strings[3];
+            address = strings[4];
+            dateOfBirth = strings[5];
+            description = strings[6];
+        }
+    }
+
     public Person(String secondName,
                   String firstName,
                   String fathersName,
@@ -95,6 +108,16 @@ public class Person {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String toCsvString() {
+        return secondName + ";" +
+                firstName + ";" +
+                (fathersName.equals("") ? " " : fathersName) + ";" +
+                mobileNumbers + ";" +
+                address + ";" +
+                dateOfBirth + ";" +
+                (description.equals("") ? " " : description);
     }
 
     /**
@@ -145,6 +168,9 @@ public class Person {
     }
 
     boolean isValidMobileNumber(String mobileNumbers) {
+        if (mobileNumbers.equals("")) {
+            return false;
+        }
         int counterSlash = 0;
         for (Character ch : mobileNumbers.toCharArray()) {
             if (ch == '/') {

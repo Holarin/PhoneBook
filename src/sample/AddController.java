@@ -43,6 +43,7 @@ public class AddController {
 
     @FXML
     void initialize() {
+
         buttonSave.setOnAction(event -> {
             boolean isValid = true;
             Person checker = new Person();

@@ -49,12 +49,12 @@ public class EditController {
             String[] phones = Controller.transferPerson.getMobileNumbers().split("/");
             String mP = "";
             String hP = "";
-            mP = phones.length == 1 ? phones[0] : "";
+            mP = phones.length >= 1 ? phones[0] : "";
             hP = phones.length == 2 ? phones[1] : "";
             textDescription.setText(Controller.transferPerson.getDescription());
             textAddress.setText(Controller.transferPerson.getAddress());
             textMobile.setText(mP);
-            textHomeMobile.setStyle(hP);
+            textHomeMobile.setText(hP);
             textSecondName.setText(Controller.transferPerson.getSecondName());
             textFirstName.setText(Controller.transferPerson.getFirstName());
             textFathersName.setText(Controller.transferPerson.getFathersName());

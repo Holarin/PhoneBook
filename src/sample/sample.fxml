@@ -19,7 +19,7 @@
               <MenuItem fx:id="addContact" mnemonicParsing="false" text="Добавить новый контакт" />
                   <MenuItem fx:id="editContact" disable="true" mnemonicParsing="false" text="Редактировать" />
                   <MenuItem fx:id="deleteContact" disable="true" mnemonicParsing="false" text="Удалить контакт" />
-                  <MenuItem mnemonicParsing="false" text="Выход" />
+                  <MenuItem fx:id="exit" mnemonicParsing="false" text="Выход" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Настройки">

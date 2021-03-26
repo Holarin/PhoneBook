@@ -9,14 +9,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
 
-    private List<Person> personList = new ArrayList<>();
+    private final String FILENAME = "data.dat";
+
+    private static List<Person> personList = new ArrayList<>();
 
     static public Person transferPerson = null;
 
@@ -56,16 +57,16 @@ public class Controller {
     private Button buttonSearch;
 
     @FXML
+    private MenuItem exit;
+
+    @FXML
     private void initialize() {
 
         setupTable();
 
-        table.getItems().add(new Person("Викторов", "Алекс", "Педро", "79038702458", "г.Москва", "2001-10-01", "Ахуенный"));
-        table.getItems().add(new Person("Викторов", "Алекс", "Петрович", "79038702458", "г.Москва", "2001-10-07", "Ахуенный"));
-        table.getItems().add(new Person("Викторов", "Алекс", "Петрович", "79038702458", "г.Москва", "2002-12-10", "Ахуенный"));
+        getPersonsFromFile(FILENAME);
 
-        personList.addAll(table.getItems());
-
+        printList(personList);
         table.setOnMouseClicked(event -> {
             onButtons();
         });
@@ -97,6 +98,15 @@ public class Controller {
         addContact.setOnAction(event -> {
             add();
         });
+
+        exit.setOnAction(event -> {
+            exit();
+        });
+    }
+
+    public void exit() {
+        overrideFile(FILENAME);
+        System.exit(0);
     }
 
     public void printList(List<Person> persons) {
@@ -242,5 +252,39 @@ public class Controller {
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+    }
+
+    void getPersonsFromFile(String filename) {
+        personList = new ArrayList<>();
+        try {
+            File file = new File(filename);
+            //создаем объект FileReader для объекта File
+            FileReader fr = new FileReader(file);
+            //создаем BufferedReader с существующего FileReader для построчного считывания
+            BufferedReader reader = new BufferedReader(fr);
+            // считаем сначала первую строку
+            String line = reader.readLine();
+            while (line != null && line != "") {
+                personList.add(new Person(line));
+                // считываем остальные строки в цикле
+                line = reader.readLine();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void overrideFile(String filename) {
+        try {
+            PrintWriter writer = new PrintWriter(filename);
+            for (Person travel : personList) {
+                writer.println(travel.toCsvString());
+            }
+            writer.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Can not override file");
+        }
     }
 }
