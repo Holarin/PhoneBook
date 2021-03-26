@@ -89,6 +89,14 @@ public class Controller {
         buttonEdit.setOnAction(event -> {
             editSelected();
         });
+
+        buttonAdd.setOnAction(event ->  {
+            add();
+        });
+
+        addContact.setOnAction(event -> {
+            add();
+        });
     }
 
     public void printList(List<Person> persons) {
@@ -141,6 +149,18 @@ public class Controller {
                 addressCol,
                 dateOfBirthCol,
                 descriptionCol);
+    }
+
+    public void add() {
+        openNewScene("add.fxml");
+        if (transferPerson != null) {
+            table.getItems().add(transferPerson);
+            personList.add(transferPerson);
+            transferPerson = null;
+        } else {
+            editContact.setDisable(true);
+            deleteContact.setDisable(true);
+        }
     }
 
     public void search() {
