@@ -24,8 +24,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Настройки">
             <items>
-              <MenuItem mnemonicParsing="false" text="Импортировать" />
-                  <MenuItem mnemonicParsing="false" text="Экспортировать" />
+              <MenuItem fx:id="importMenu" mnemonicParsing="false" text="Импортировать" />
+                  <MenuItem fx:id="export" mnemonicParsing="false" text="Экспортировать" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Справка">

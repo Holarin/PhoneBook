@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.javafx.iio.gif.GIFImageLoaderFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,9 +16,9 @@ import java.util.List;
 
 public class Controller {
 
-    private final String FILENAME = "data.dat";
+    public static final String FILENAME = "data.dat";
 
-    private static List<Person> personList = new ArrayList<>();
+    public static List<Person> personList = new ArrayList<>();
 
     static public Person transferPerson = null;
 
@@ -39,6 +40,9 @@ public class Controller {
     private MenuItem deleteContact;
 
     @FXML
+    private MenuItem export;
+
+    @FXML
     private TableView<Person> table;
 
     @FXML
@@ -55,6 +59,9 @@ public class Controller {
 
     @FXML
     private Button buttonSearch;
+
+    @FXML
+    private MenuItem importMenu;
 
     @FXML
     private MenuItem exit;
@@ -102,6 +109,18 @@ public class Controller {
         exit.setOnAction(event -> {
             exit();
         });
+
+        importMenu.setOnAction(event -> {
+            openNewScene("export.fxml");
+            if (ExportController.change) {
+                printList(personList);
+                ExportController.change = false;
+            }
+        });
+
+        export.setOnAction(event -> {
+            openNewScene("import.fxml");
+        });
     }
 
     public void exit() {
@@ -110,9 +129,17 @@ public class Controller {
     }
 
     public void printList(List<Person> persons) {
-        table.getItems().clear();
         for (Person person : persons) {
-            table.getItems().add(person);
+            boolean isFound = false;
+            for (Person person1 : table.getItems()) {
+                if (person.equals(person1)) {
+                    isFound = true;
+                    break;
+                }
+            }
+            if (!isFound) {
+                table.getItems().add(person);
+            }
         }
     }
 
@@ -254,7 +281,7 @@ public class Controller {
         stage.showAndWait();
     }
 
-    void getPersonsFromFile(String filename) {
+    public static void getPersonsFromFile(String filename) {
         personList = new ArrayList<>();
         try {
             File file = new File(filename);
@@ -276,7 +303,7 @@ public class Controller {
         }
     }
 
-    public void overrideFile(String filename) {
+    public static void overrideFile(String filename) {
         try {
             PrintWriter writer = new PrintWriter(filename);
             for (Person travel : personList) {

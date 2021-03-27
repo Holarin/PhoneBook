@@ -1,6 +1,9 @@
 package sample;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXML;
+
+import java.util.Objects;
 
 /**
  * Класс, описывающий человека
@@ -108,6 +111,19 @@ public class Person {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return secondName.equals(person.secondName) && firstName.equals(person.firstName) && fathersName.equals(person.fathersName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(secondName, firstName, fathersName);
     }
 
     public String toCsvString() {
