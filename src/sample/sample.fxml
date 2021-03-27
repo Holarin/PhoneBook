@@ -30,7 +30,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Справка">
             <items>
-              <MenuItem mnemonicParsing="false" text="О приложении" />
+              <MenuItem fx:id="about" mnemonicParsing="false" text="О приложении" />
             </items>
           </Menu>
         </menus>

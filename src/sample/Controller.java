@@ -67,6 +67,9 @@ public class Controller {
     private MenuItem exit;
 
     @FXML
+    private MenuItem about;
+
+    @FXML
     private void initialize() {
 
         setupTable();
@@ -87,7 +90,7 @@ public class Controller {
         });
 
         buttonSearch.setOnAction(event -> {
-            search();
+            searchPrint(search(textSearch.getText(), personList));
         });
 
         buttonDelete.setOnAction(event -> {
@@ -118,6 +121,16 @@ public class Controller {
             }
         });
 
+        about.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("О приложении");
+            alert.setHeaderText("Телефонная книга");
+            alert.setContentText("Приложение разработано в подвале на коленке на самодельном ноутбуке за шашлык." +
+                    " Просьба отнестись к мелким багам с пониманием.");
+
+            alert.showAndWait();
+        });
+
         export.setOnAction(event -> {
             openNewScene("import.fxml");
         });
@@ -126,6 +139,11 @@ public class Controller {
     public void exit() {
         overrideFile(FILENAME);
         System.exit(0);
+    }
+
+    public void searchPrint(List<Person> persons) {
+        table.getItems().clear();
+        table.getItems().addAll(persons);
     }
 
     public void printList(List<Person> persons) {
@@ -200,13 +218,12 @@ public class Controller {
         }
     }
 
-    public void search() {
+    List<Person> search(String textSearch, List<Person> personList) {
         List<Person> persons = new ArrayList<>();
-        if (textSearch.getText().equals("")) {
-            printList(personList);
-            return;
+        if (textSearch.equals("")) {
+            return personList;
         }
-        String[] names = textSearch.getText().split(" ");
+        String[] names = textSearch.split(" ");
 
         for (Person person : personList) {
             for (String str : names) {
@@ -227,7 +244,7 @@ public class Controller {
             }
         }
 
-        printList(persons);
+        return persons;
     }
 
     public void onButtons() {
