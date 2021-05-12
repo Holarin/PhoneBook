@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,17 @@ public class Controller {
 
     @FXML
     private void initialize() {
-
+        DbPhone phone = null;
+        try {
+            phone = DbPhone.getInstance();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        try {
+            phone.createTable();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         setupTable();
 
         getPersonsFromFile(FILENAME);
@@ -101,7 +112,7 @@ public class Controller {
             editSelected();
         });
 
-        buttonAdd.setOnAction(event ->  {
+        buttonAdd.setOnAction(event -> {
             add();
         });
 
@@ -162,6 +173,7 @@ public class Controller {
     }
 
     public void setupTable() {
+
         secondNameCol = new TableColumn<>("Фамилия");
         secondNameCol.setMinWidth(200.);
         secondNameCol.setCellValueFactory(new PropertyValueFactory<>("SecondName"));
@@ -287,7 +299,7 @@ public class Controller {
         loader.setLocation(getClass().getResource(window));
         try {
             loader.load();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         Parent root = loader.getRoot();
@@ -299,36 +311,21 @@ public class Controller {
     }
 
     public static void getPersonsFromFile(String filename) {
-        personList = new ArrayList<>();
+        DbPhone phone = null;
         try {
-            File file = new File(filename);
-            //создаем объект FileReader для объекта File
-            FileReader fr = new FileReader(file);
-            //создаем BufferedReader с существующего FileReader для построчного считывания
-            BufferedReader reader = new BufferedReader(fr);
-            // считаем сначала первую строку
-            String line = reader.readLine();
-            while (line != null && line != "") {
-                personList.add(new Person(line));
-                // считываем остальные строки в цикле
-                line = reader.readLine();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            phone = DbPhone.getInstance();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
+        personList = phone.getPersons();
     }
 
     public static void overrideFile(String filename) {
         try {
-            PrintWriter writer = new PrintWriter(filename);
-            for (Person travel : personList) {
-                writer.println(travel.toCsvString());
-            }
-            writer.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Can not override file");
+            DbPhone phone = DbPhone.getInstance();
+            phone.addAll(personList);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }
